@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyApplication</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_id">your_app_id</string>
+    <string name="update_status">Update Status</string>
+    <string name="post_image">Post Image</string>
+
+</resources>
