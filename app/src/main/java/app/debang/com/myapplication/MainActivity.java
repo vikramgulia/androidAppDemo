@@ -65,11 +65,11 @@ public class MainActivity extends FragmentActivity {
         postImageBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                postImage();
+                postImageWithPermissions();
             }
         });
 
-        updateStatusBtn = (Button) findViewById(R.id.post_image);
+        updateStatusBtn = (Button) findViewById(R.id.update_status);
         updateStatusBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,38 +115,48 @@ public class MainActivity extends FragmentActivity {
                     this, PERMISSIONS));
     }
 
-    public void postImage(){
+    public void postImageWithPermissions(){
         if(checkPermissions()){
-            Bitmap img = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
-            Request uploadRequest = Request.newUploadPhotoRequest(Session.getActiveSession(), img, new Request.Callback() {
-                @Override
-                public void onCompleted(Response response) {
-                    Toast.makeText(MainActivity.this, "Photo uploaded successfully", Toast.LENGTH_LONG).show();
-                }
-            });
-            uploadRequest.executeAsync();
+            postImage();
         } else {
             requestPermissions();
+            postImage();
         }
+    }
+
+    public void postImage(){
+        Bitmap img = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
+        Request uploadRequest = Request.newUploadPhotoRequest(Session.getActiveSession(), img, new Request.Callback() {
+            @Override
+            public void onCompleted(Response response) {
+                Toast.makeText(MainActivity.this, "Photo uploaded successfully", Toast.LENGTH_LONG).show();
+            }
+        });
+        uploadRequest.executeAsync();
     }
 
     public void postStatusMessage() {
         if (checkPermissions()) {
-            Request request = Request.newStatusUpdateRequest(
-                    Session.getActiveSession(), message,
-                    new Request.Callback() {
-                        @Override
-                        public void onCompleted(Response response) {
-                            if (response.getError() == null)
-                                Toast.makeText(MainActivity.this,
-                                        "Status updated successfully",
-                                        Toast.LENGTH_LONG).show();
-                        }
-                    });
-            request.executeAsync();
+            postStatus();
         } else {
             requestPermissions();
+            postStatus();
         }
+    }
+
+    public void postStatus(){
+        Request request = Request.newStatusUpdateRequest(
+                Session.getActiveSession(), message,
+                new Request.Callback() {
+                    @Override
+                    public void onCompleted(Response response) {
+                        if (response.getError() == null)
+                            Toast.makeText(MainActivity.this,
+                                    "Status updated successfully",
+                                    Toast.LENGTH_LONG).show();
+                    }
+                });
+        request.executeAsync();
     }
 
     @Override
